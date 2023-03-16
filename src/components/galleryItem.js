@@ -42,7 +42,6 @@ function GalleryItem({ song }) {
   };
   const handleClick = () => {
     setIsExpanded(!isExpanded);
-    console.log(isExpanded);
   };
 
   return (
