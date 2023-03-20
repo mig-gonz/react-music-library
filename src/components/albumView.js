@@ -28,7 +28,7 @@ function AlbumView() {
       <h1>{albumData.primaryGenreName}</h1>
       <ul>
         {songs.map((song) => {
-          return <li key={song.collectionName}>{song.trackName}</li>;
+          return <li key={song.trackId}>{song.trackName}</li>;
         })}
       </ul>
     </div>
