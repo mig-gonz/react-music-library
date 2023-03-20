@@ -1,18 +1,16 @@
-import "./App.css";
-// import { DataContext } from "../Context/dataContest";
-import { useEffect, useState, useRef } from "react";
-import { SearchContext } from "./Context/SearchContext";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { useState, useEffect } from "react";
 import Gallery from "./components/gallery";
 import Search from "./components/search";
+import AlbumView from "./components/albumView";
+import ArtistView from "./components/artistView";
 
 function App() {
-  // let [search, setSearch] = useState("The Gorillaz");
+  let [search, setSearch] = useState("The Gorillaz");
   let [message, setMessage] = useState("Search for Music!");
   let [data, setData] = useState([]);
-  let inputRef = useRef("");
 
-  const fetchData = (search) => {
-    document.title = inputRef.current.value;
+  useEffect(() => {
     fetch(`https://itunes.apple.com/search?term=${search}`)
       .then((response) => response.json())
       .then(({ resultCount, results }) => {
@@ -21,16 +19,26 @@ function App() {
         setMessage(resultCount ? successMessage : errorMessage);
         setData(results);
       });
-  };
+  }, [search]);
+
   return (
     <div>
-      <SearchContext.Provider value={{ ref: inputRef, fetchData }}>
-        <Search />
-      </SearchContext.Provider>
-      {message}
-      {/*  <DataContext.Provider value={data}> */}
-      <Gallery data={data} />
-      {/*  </DataContext.Provider> */}
+      <Router>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <div>
+                <Search setSearch={setSearch} />
+                {message}
+                <Gallery data={data} />
+              </div>
+            }
+          />
+          <Route path="/album/:id" element={<AlbumView />} />
+          <Route path="/artist/:id" element={<ArtistView />} />
+        </Routes>
+      </Router>
     </div>
   );
 }
